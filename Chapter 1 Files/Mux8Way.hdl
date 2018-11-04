@@ -1,0 +1,42 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux8Way.hdl
+
+/**
+ * 8-way multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       etc.
+ *       h if sel == 111
+ */
+
+CHIP Mux8Way {
+    IN a, b, c, d,
+       e, f, g, h,
+       sel[3];
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+Not(in=sel[2], out=notSel2);
+Not(in=sel[1], out=notSel1);
+Not(in=sel[0], out=notSel0);
+And4Way(a=a, b= notSel2, c= notSel1, d=notSel0, out=w1);
+And4Way(a=b, b= notSel2, c= notSel1, d=sel[0], out=w2);
+And4Way(a=c, b= notSel2, c= sel[1], d= notSel0, out=w3);
+And4Way(a=d, b= notSel2, c= sel[1], d= sel[0], out=w4);
+And4Way(a=e, b= sel[2], c= notSel1, d= notSel0, out=w5);
+And4Way(a=f, b= sel[2], c= notSel1, d= sel[0], out=w6);
+And4Way(a=g, b= sel[2], c= sel[1], d= notSel0, out=w7);
+And4Way(a=h, b= sel[2], c= sel[1], d= sel[0], out=w8);
+Or(a=w1, b=w2, out=s1);
+Or(a=w3,b=w4,out=s2);
+Or(a=w5,b=w6,out=s3);
+Or(a=w7,b=w8,out=s4);
+Or(a=s1,b=s2,out=t1);
+Or(a=s3,b=s4,out=t2);
+Or(a=t1,b=t2,out=out);
+
+
+}
